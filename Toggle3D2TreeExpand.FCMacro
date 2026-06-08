@@ -1,0 +1,9 @@
+import FreeCAD
+import FreeCADGui
+
+# Example: Toggle Axis Cross visibility
+#param = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Display")
+Eparam = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/TreeView/SyncSelection")
+param = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/TreeView")
+new_val = not param.GetBool("SyncSelection")
+param.SetBool("SyncSelection", new_val)
