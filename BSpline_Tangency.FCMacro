@@ -1,3 +1,23 @@
+#########################################################
+#
+# BSPLINE TANGENCY
+#
+# This macro automates the BSpline tangency workaround.
+# 
+# Prereq:
+#   The macro must be assigned to a button or it won't work, as the selection of the BSPlines gets lost if you go into the macros menu.
+#   The button only needs to appear in Sketcher
+#
+# Instructions:
+#   This works in sketcher edit/design mode.
+#   Select two BSplines. They don't have to be connected.
+#   Click the button assigned to the macro.
+# 
+#   The two BSplines will be connected at one end. A construction line will be created from the closest control point of one bspline
+#   to the closest control point of the other bspline and then the line is made concentric to the connected endpoints.
+#
+#########################################################
+
 import FreeCADGui
 import Part
 import Sketcher
