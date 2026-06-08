@@ -1,0 +1,70 @@
+import FreeCADGui
+import Part
+import Sketcher
+
+# Define standard constraint IDs to ensure compatibility
+selection = FreeCADGui.Selection.getSelectionEx()
+
+if not selection:
+    App.Console.PrintError("Please select vertices in a sketch.\n")
+else:
+    # Get selection details
+    sel_obj = selection[0]
+    sketch = sel_obj.Object
+    sub_elements = sel_obj.SubElementNames 
+    
+
+    if not sketch.isDerivedFrom("Sketcher::SketchObject"):
+        App.Console.PrintError("Selection is not a Sketch.\n")
+    elif len(sub_elements) < 3:
+        App.Console.PrintError(f"Selected {len(sub_elements)} points. Need 3.\n")
+    else:
+        try:
+            
+            print("Selected:")
+            for obj in sub_elements:
+                print(obj)
+                
+            App.ActiveDocument.openTransaction("Create Constrained Line")
+            # Convert 'VertexN' strings to 0-based integer indices
+            v_idx = [int(name.replace("Vertex", "")) - 1 for name in sub_elements[:3]]
+            
+            # Create the line
+            line_geom = Part.LineSegment(App.Vector(0,0,0), App.Vector(1,1,0))
+            line_idx = sketch.addGeometry(line_geom, False)
+            # Make the line construction
+            sketch.setConstruction(line_idx, True)
+        
+            print("Line created.")
+            
+            # --- APPLY CONSTRAINTS USING INTEGER CONSTANTS ---
+            
+            # 1. Start point of line (1) to first selected vertex (v_idx[0])
+            # Syntax: (ID, TargetGeo, TargetPoint, LineGeo, LinePoint)
+            sketch.addConstraint(Sketcher.Constraint("Coincident", v_idx[0], 1, line_idx, 1))
+            print(v_idx[0])
+            print(line_idx)
+            print("applied coincident between.")
+
+            # 3. End point of line (2) to third selected vertex (v_idx[2])
+            #sketch.addConstraint(Sketcher.Constraint("Coincident", v_idx[2], 1, line_idx, 2))
+            sketch.addConstraint(Sketcher.Constraint("Coincident",  v_idx[2], 1, line_idx, 2))
+        
+            # 2. Point-on-Object: Second vertex (v_idx[1]) onto the line edge (line_idx)
+            # Syntax: (ID, LineGeo, VertexGeo, VertexPoint)
+            sketch.addConstraint(Sketcher.Constraint("PointOnObject", v_idx[1], 1, line_idx))
+            #sketch.addConstraint(Sketcher.Constraint("Coincident", v_idx[0], 1, line_idx, 1))
+            
+            FreeCADGui.Selection.clearSelection()
+
+            App.ActiveDocument.commitTransaction()
+
+            App.ActiveDocument.recompute()
+            App.Console.PrintMessage("Line successfully constrained.\n")
+
+        except Exception as e:
+            App.Console.PrintError(f"Solver Error: {str(e)}\n")
+            # If it failed, try to remove the malformed line
+            if 'line_idx' in locals():
+                sketch.delGeometry(line_idx)
+                App.ActiveDocument.recompute()
