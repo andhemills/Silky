@@ -1,0 +1,68 @@
+# SelectGroupContents.FCMacro
+# Select all non-folder objects within selected group(s) in the Tree View.
+# Supports multiple selected groups and optional recursion into sub-folders.
+
+import FreeCAD
+import FreeCADGui
+
+RECURSIVE = True  # Set to False to only select direct children
+
+def collect_objects(group, recursive):
+    """Return list of non-folder objects within a group."""
+    results = []
+    for obj in group.Group:
+        if hasattr(obj, 'Group'):
+            # obj is a folder/group
+            if recursive:
+                results.extend(collect_objects(obj, recursive))
+            # END if recursive
+        else:
+            results.append(obj)
+        # END if/else hasattr Group
+    # END for obj
+    return results
+# END collect_objects()
+
+def main():
+    doc = FreeCAD.ActiveDocument
+    if not doc:
+        FreeCAD.Console.PrintError("SelectGroupContents: No active document.\n")
+        return
+    # END if not doc
+
+    sel = FreeCADGui.Selection.getSelection()
+    if not sel:
+        FreeCAD.Console.PrintMessage("SelectGroupContents: No objects selected.\n")
+        return
+    # END if not sel
+
+    # Filter selection to only groups/folders
+    selected_groups = [obj for obj in sel if hasattr(obj, 'Group')]
+    if not selected_groups:
+        FreeCAD.Console.PrintMessage("SelectGroupContents: No folders in selection.\n")
+        return
+    # END if not selected_groups
+
+    # Collect target objects from all selected groups
+    targets = []
+    for group in selected_groups:
+        targets.extend(collect_objects(group, RECURSIVE))
+    # END for group
+
+    if not targets:
+        FreeCAD.Console.PrintMessage("SelectGroupContents: No non-folder objects found.\n")
+        return
+    # END if not targets
+
+    # Replace selection with collected objects
+    FreeCADGui.Selection.clearSelection()
+    for obj in targets:
+        FreeCADGui.Selection.addSelection(obj)
+    # END for obj
+
+    FreeCAD.Console.PrintMessage(
+        f"SelectGroupContents: Selected {len(targets)} object(s).\n"
+    )
+# END main()
+
+main()
