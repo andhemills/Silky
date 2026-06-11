@@ -1,0 +1,281 @@
+#    This file is modified from Silk Workbench
+#    (c) Edward Mills 2016-2017
+#    edwardvmills@gmail.com
+#
+#    NURBS Surface modeling tools focused on low degree and seam continuity (FreeCAD Workbench)
+#
+#    Silk is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+#    SilkySketch2Seg.FCMacro
+#	 Edited by Andy Mills
+#
+#	 Select a number of valid sketches for Silk input pipeline. 
+
+import FreeCAD, FreeCADGui as Gui
+import ArachNURBS as AN
+import math
+
+# ---------------------------------------------------------------------------
+# User-adjustable midpoint u values.
+# Valid range: 0.0 < pointUlow < pointUhigh < 1.0
+# ---------------------------------------------------------------------------
+pointUlow  = 0.1
+pointUhigh = 0.9
+# ---------------------------------------------------------------------------
+
+# Colors for segmented CubicCurve_4s by position (integers 0-255)
+# Index 0: closest to u=0.0  — medium purple
+# Index 1: middle segment    — magenta
+# Index 2: closest to u=1.0  — periwinkle
+cubic_colors = [
+    (170,  85, 255),
+    (255,  85, 255),
+    (170, 170, 255),
+]
+
+
+def classify_sketch(sketch):
+    geom     = sketch.Geometry
+    warnings = []
+    lines = []; arcs = []; ellipses = []; bsplines = []; circles = []; other = []
+
+    for i in range(len(geom)):
+        if sketch.getConstruction(i):
+            continue
+        tid = geom[i].TypeId
+        if tid == 'Part::GeomLineSegment':
+            lines.append(i)
+        elif tid == 'Part::GeomArcOfCircle':
+            arcs.append(i)
+        elif tid == 'Part::GeomArcOfEllipse':
+            ellipses.append(i)
+        elif tid == 'Part::GeomBSplineCurve':
+            if geom[i].Degree == 3 and geom[i].NbPoles == 4:
+                bsplines.append(i)
+            else:
+                other.append(i)
+        elif tid == 'Part::GeomCircle':
+            circles.append(i)
+        else:
+            other.append(i)
+
+    if len(circles) > 0:
+        return 'node', warnings
+    if len(lines) == 3 and not arcs and not ellipses and not bsplines:
+        return '3L', warnings
+
+    arc_over_90 = False
+    if arcs:
+        arc   = geom[arcs[0]]
+        angle = abs(arc.LastParameter - arc.FirstParameter)
+        if angle > (math.pi / 2.0 + 1e-6):
+            arc_over_90 = True
+            warnings.append(
+                "sketch {} contains an arc spanning {:.1f} degrees "
+                "(greater than 90). ControlPoly4 will only use the "
+                "first 90 degrees.".format(sketch.Label, math.degrees(angle)))
+
+    if bsplines or ellipses or arcs or len(lines) == 1:
+        return ('arc_over_90' if arc_over_90 else 'FirstElement'), warnings
+
+    return 'unrecognized', warnings
+
+
+def make_group(label):
+    grp = FreeCAD.ActiveDocument.addObject(
+        "App::DocumentObjectGroup", "Group")
+    grp.Label = label
+    return grp
+
+
+def execute():
+    sel = Gui.Selection.getSelection()
+
+    if not sel:
+        FreeCAD.Console.PrintError(
+            "CubicCurve_4_fromSketches: nothing selected. "
+            "Select one or more Sketches and run again.\n")
+        return
+
+    if not (0.0 < pointUlow < pointUhigh < 1.0):
+        FreeCAD.Console.PrintError(
+            "CubicCurve_4_fromSketches: invalid pointUlow / pointUhigh. "
+            "Require 0.0 < pointUlow < pointUhigh < 1.0. "
+            "Got pointUlow={}, pointUhigh={}. Nothing created.\n".format(
+                pointUlow, pointUhigh))
+        return
+
+    sketches = []
+    rejected = []
+    for obj in sel:
+        if obj.TypeId == 'Sketcher::SketchObject':
+            sketches.append(obj)
+        else:
+            rejected.append(obj.Name)
+
+    if rejected:
+        FreeCAD.Console.PrintWarning(
+            "CubicCurve_4_fromSketches: ignoring non-Sketch objects: {}\n".format(
+                ', '.join(rejected)))
+
+    if not sketches:
+        FreeCAD.Console.PrintError(
+            "CubicCurve_4_fromSketches: no valid Sketch objects in selection. "
+            "Nothing created.\n")
+        return
+
+    # --- Top-level groups, created once for the whole run ---
+    top_polys    = make_group("ControlPoly4s")
+    top_curves   = make_group("CubicCurve_4s")
+    top_points   = make_group("Points")
+    top_segments = make_group("ControlPoly4_segments")
+    top_cubics   = make_group("CubicCurve_4_segments")
+
+    total_polys    = 0
+    total_curves   = 0
+    total_points   = 0
+    total_segments = 0
+    total_cubics   = 0
+
+    for sketch in sketches:
+
+        kind, warnings = classify_sketch(sketch)
+
+        for w in warnings:
+            FreeCAD.Console.PrintWarning(
+                "CubicCurve_4_fromSketches: {}\n".format(w))
+
+        if kind == 'node':
+            FreeCAD.Console.PrintMessage(
+                "CubicCurve_4_fromSketches: skipping {} — node sketch "
+                "(line + circle) is not a ControlPoly4 input.\n".format(
+                    sketch.Label))
+            continue
+
+        if kind == 'unrecognized':
+            FreeCAD.Console.PrintMessage(
+                "CubicCurve_4_fromSketches: skipping {} — sketch geometry "
+                "not recognized as a valid ControlPoly4 input.\n".format(
+                    sketch.Label))
+            continue
+
+        prefix = sketch.Label
+
+        # --- Per-sketch subgroups (only for multi-object types) ---
+        grp_points   = make_group(prefix + "_Points")
+        grp_segments = make_group(prefix + "_ControlPoly4_segments")
+        grp_cubics   = make_group(prefix + "_CubicCurve_4_segments")
+
+        # Add subgroups to their respective top-level groups
+        top_points.addObject(grp_points)
+        top_segments.addObject(grp_segments)
+        top_cubics.addObject(grp_cubics)
+
+        # --- Create ControlPoly4 ---
+        poly = FreeCAD.ActiveDocument.addObject(
+            "Part::FeaturePython", "ControlPoly4_000")
+        if kind == '3L':
+            AN.ControlPoly4_3L(poly, sketch)
+        else:
+            AN.ControlPoly4_FirstElement(poly, sketch)
+        poly.ViewObject.Proxy      = 0
+        poly.ViewObject.LineWidth  = 1.00
+        poly.ViewObject.LineColor  = (0, 255, 0)
+        poly.ViewObject.PointSize  = 4.00
+        poly.ViewObject.PointColor = (0, 255, 0)
+        poly.Label = prefix + "_ControlPoly4"
+        top_polys.addObject(poly)
+        total_polys += 1
+
+        # --- Create CubicCurve_4 from poly ---
+        source_curve = FreeCAD.ActiveDocument.addObject(
+            "Part::FeaturePython", "CubicCurve_4_000")
+        AN.CubicCurve_4(source_curve, poly)
+        source_curve.ViewObject.Proxy      = 0
+        source_curve.ViewObject.LineWidth  = 1.00
+        source_curve.ViewObject.LineColor  = (255, 170, 0)
+        source_curve.ViewObject.PointSize  = 2.00
+        source_curve.ViewObject.PointColor = (255, 255, 0)
+        source_curve.Label = prefix + "_CubicCurve_4"
+        top_curves.addObject(source_curve)
+        total_curves += 1
+
+        # --- Create 4 points on the curve ---
+        curve_points = []
+        for u_val in [0.0, pointUlow, pointUhigh, 1.0]:
+            pt = FreeCAD.ActiveDocument.addObject(
+                "Part::FeaturePython", "Point_onCurve_000")
+            AN.Point_onCurve(pt, source_curve, u_val)
+            pt.ViewObject.Proxy      = 0
+            pt.ViewObject.PointSize  = 8.00
+            pt.ViewObject.PointColor = (255, 0, 0)
+            curve_points.append(pt)
+            grp_points.addObject(pt)
+            total_points += 1
+
+        # --- Create segments ---
+        curve_segments = []
+        for i in range(len(curve_points) - 1):
+            pt0 = curve_points[i]
+            pt1 = curve_points[i + 1]
+
+            if pt0.u == pt1.u:
+                FreeCAD.Console.PrintWarning(
+                    "CubicCurve_4_fromSketches: skipping pair ({}, {}) "
+                    "on {} — duplicate u value {}\n".format(
+                        pt0.Name, pt1.Name, sketch.Label, pt0.u))
+                continue
+
+            seg = FreeCAD.ActiveDocument.addObject(
+                "Part::FeaturePython", "ControlPoly4_segment_000")
+            AN.ControlPoly4_segment(seg, source_curve, pt0, pt1)
+            seg.ViewObject.Proxy      = 0
+            seg.ViewObject.LineWidth  = 1.00
+            seg.ViewObject.LineColor  = (0, 255, 255)
+            seg.ViewObject.PointSize  = 4.00
+            seg.ViewObject.PointColor = (0, 0, 255)
+            curve_segments.append(seg)
+            grp_segments.addObject(seg)
+            total_segments += 1
+
+        if len(curve_segments) != 3:
+            FreeCAD.Console.PrintWarning(
+                "CubicCurve_4_fromSketches: {} produced {} segment(s) "
+                "instead of the expected 3.\n".format(
+                    sketch.Label, len(curve_segments)))
+
+        # --- Create segmented CubicCurve_4s ---
+        for i, seg in enumerate(curve_segments):
+            cubic = FreeCAD.ActiveDocument.addObject(
+                "Part::FeaturePython", "CubicCurve_4_000")
+            AN.CubicCurve_4(cubic, seg)
+            cubic.ViewObject.Proxy      = 0
+            cubic.ViewObject.LineWidth  = 1.00
+            cubic.ViewObject.LineColor  = cubic_colors[i] if i < len(cubic_colors) else (255, 170, 0)
+            cubic.ViewObject.PointSize  = 2.00
+            cubic.ViewObject.PointColor = (255, 255, 0)
+            grp_cubics.addObject(cubic)
+            total_cubics += 1
+
+    FreeCAD.ActiveDocument.recompute()
+
+    FreeCAD.Console.PrintMessage(
+        "CubicCurve_4_fromSketches: done. "
+        "{} poly(s), {} source curve(s), {} point(s), "
+        "{} segment(s), {} segmented curve(s) "
+        "from {} sketch(es).\n".format(
+            total_polys, total_curves, total_points,
+            total_segments, total_cubics, len(sketches)))
+
+execute()
