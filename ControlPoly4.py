@@ -175,7 +175,8 @@ class ControlPoly4():
 			sketch=Gui.Selection.getSelection()[0]
 			a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","ControlPoly4_3L_000")
 			AN.ControlPoly4_3L(a,sketch)
-			a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+			import ControlPoly4_vp
+			ControlPoly4_vp.ControlPoly4_ViewProvider(a.ViewObject)
 			a.ViewObject.LineWidth = 1.00
 			a.ViewObject.LineColor = (0.00,1.00,1.00)
 			a.ViewObject.PointSize = 4.00
@@ -186,7 +187,8 @@ class ControlPoly4():
 			sketch=Gui.Selection.getSelection()[0]
 			a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","ControlPoly4_FirstElement_000")
 			AN.ControlPoly4_FirstElement(a,sketch)
-			a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+			import ControlPoly4_vp
+			ControlPoly4_vp.ControlPoly4_ViewProvider(a.ViewObject)
 			a.ViewObject.LineWidth = 1.00
 			a.ViewObject.LineColor = (0.00,1.00,1.00)
 			a.ViewObject.PointSize = 4.00
@@ -198,7 +200,8 @@ class ControlPoly4():
 			edge = SelectedEdge
 			a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","ControlPoly4_GridEdge_000")
 			AN.ControlPoly4_GridEdge(a,grid, edge)
-			a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+			import ControlPoly4_vp
+			ControlPoly4_vp.ControlPoly4_ViewProvider(a.ViewObject)
 			a.ViewObject.LineWidth = 1.00
 			a.ViewObject.LineColor = (0.00,1.00,1.00)
 			a.ViewObject.PointSize = 4.00
@@ -210,7 +213,8 @@ class ControlPoly4():
 			sketch1=Gui.Selection.getSelection()[1]
 			a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","ControlPoly4_2N_000")
 			AN.ControlPoly4_2N(a,sketch0,sketch1)
-			a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+			import ControlPoly4_vp
+			ControlPoly4_vp.ControlPoly4_ViewProvider(a.ViewObject)
 			a.ViewObject.LineWidth = 1.00
 			a.ViewObject.LineColor = (0.00,1.00,1.00)
 			a.ViewObject.PointSize = 4.00
@@ -222,7 +226,8 @@ class ControlPoly4():
 			poly4_1=Gui.Selection.getSelection()[1]
 			a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","ControlPoly4_2X4P_000")
 			AN.ControlPoly4_2X4P(a,poly4_0,poly4_1)
-			a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+			import ControlPoly4_vp
+			ControlPoly4_vp.ControlPoly4_ViewProvider(a.ViewObject)
 			a.ViewObject.LineWidth = 1.00
 			a.ViewObject.LineColor = (0.00,1.00,1.00)
 			a.ViewObject.PointSize = 4.00
@@ -234,7 +239,8 @@ class ControlPoly4():
 			Point1=Gui.Selection.getSelection()[1]
 			a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","ControlPoly4_2P_000")
 			AN.ControlPoly4_2P(a,Point0,Point1)
-			a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+			import ControlPoly4_vp
+			ControlPoly4_vp.ControlPoly4_ViewProvider(a.ViewObject)
 			a.ViewObject.LineWidth = 1.00
 			a.ViewObject.LineColor = (0.00,1.00,1.00)
 			a.ViewObject.PointSize = 4.00
