@@ -45,7 +45,8 @@ class CubicCurve_4():
 			poly=Gui.Selection.getSelection()[0]
 			a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","CubicCurve_4_000")
 			AN.CubicCurve_4(a,poly)
-			a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+			import CubicCurve_4_vp
+			CubicCurve_4_vp.CubicCurve_4_ViewProvider(a.ViewObject)
 			a.ViewObject.LineWidth = 1.00
 			a.ViewObject.LineColor = (1.00,0.67,0.00)
 			a.ViewObject.PointSize = 2.00

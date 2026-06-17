@@ -49,7 +49,8 @@ class ControlPoly4_segment():
 
 		a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","ControlPoly4_segment_000")
 		AN.ControlPoly4_segment(a,NL_Curve, Point_onCurve_0, Point_onCurve_1)
-		a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+		import ControlPoly4_segment_vp
+		ControlPoly4_segment_vp.ControlPoly4_segment_ViewProvider(a.ViewObject)
 		a.ViewObject.LineWidth = 1.00
 		a.ViewObject.LineColor = (0.00,1.00,1.00)
 		a.ViewObject.PointSize = 4.00

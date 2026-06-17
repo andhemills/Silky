@@ -35,7 +35,8 @@ class SubGrid63_2Surf64():
 
 		a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","SubGrid63_2Surf64")
 		AN.SubGrid63_2Surf64(a,Surf_0,Surf_1)
-		a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+		import SubGrid63_2Surf64_vp
+		SubGrid63_2Surf64_vp.SubGrid63_2Surf64_ViewProvider(a.ViewObject)
 		a.ViewObject.LineWidth = 1.00
 		a.ViewObject.LineColor = (1.00,0.67,0.00)
 		a.ViewObject.PointSize = 2.00

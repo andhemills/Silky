@@ -38,7 +38,8 @@ class SubGrid33_2Grid64():
 
 		a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","SubGrid33_2Grid64_000")
 		AN.SubGrid33_2Grid64(a,Grid_a,Grid_b)
-		a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+		import SubGrid33_2Grid64_vp
+		SubGrid33_2Grid64_vp.SubGrid33_2Grid64_ViewProvider(a.ViewObject)
 		a.ViewObject.LineWidth = 3.00
 		a.ViewObject.LineColor = (255/255,170/255,255/255)
 		a.ViewObject.PointSize = 4.00

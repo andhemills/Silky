@@ -45,7 +45,8 @@ class ControlGrid44_flow():
 		grid=Gui.Selection.getSelection()[0]
 		a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","ControlGrid44_flow_000")
 		AN.ControlGrid44_flow(a,grid)
-		a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+		import ControlGrid44_flow_vp
+		ControlGrid44_flow_vp.ControlGrid44_flow_ViewProvider(a.ViewObject)
 		a.ViewObject.LineWidth = 1.00
 		a.ViewObject.LineColor = (0.67,1.00,1.00)
 		a.ViewObject.PointSize = 4.00

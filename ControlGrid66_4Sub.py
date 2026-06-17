@@ -38,7 +38,8 @@ class ControlGrid66_4Sub():
 		SubGrid_3=Gui.Selection.getSelection()[3]
 		a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","ControlGrid66_4Sub_000")
 		AN.ControlGrid66_4Sub(a,SubGrid_0, SubGrid_1, SubGrid_2, SubGrid_3)
-		a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+		import ControlGrid66_4Sub_vp
+		ControlGrid66_4Sub_vp.ControlGrid66_4Sub_ViewProvider(a.ViewObject)
 		a.ViewObject.LineWidth = 1.00
 		a.ViewObject.LineColor = (255/255,85/255,255/255)
 		a.ViewObject.PointSize = 2.00

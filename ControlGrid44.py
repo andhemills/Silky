@@ -54,7 +54,8 @@ class ControlGrid44():
 			poly3=Gui.Selection.getSelection()[3]
 			a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","ControlGrid44_4_000")
 			AN.ControlGrid44_4(a,poly0, poly1, poly2, poly3)
-			a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+			import ControlGrid44_vp
+			ControlGrid44_vp.ControlGrid44_ViewProvider(a.ViewObject)
 			a.ViewObject.LineWidth = 1.00
 			a.ViewObject.LineColor = (0.67,1.00,1.00)
 			a.ViewObject.PointSize = 4.00
@@ -66,7 +67,8 @@ class ControlGrid44():
 			poly1=Gui.Selection.getSelection()[1]
 			poly2=Gui.Selection.getSelection()[2]
 			a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","ControlGrid44_3_000")
-			a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+			import ControlGrid44_vp
+			ControlGrid44_vp.ControlGrid44_ViewProvider(a.ViewObject)
 			AN.ControlGrid44_3(a,poly0, poly1, poly2)
 			a.ViewObject.LineWidth = 1.00
 			a.ViewObject.LineColor = (0.67,1.00,1.00)

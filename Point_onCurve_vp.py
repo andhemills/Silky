@@ -1,0 +1,71 @@
+###############################################
+#
+# Silky/Point_onCurve_vp.py
+#
+# ViewProvider for Silk Point_onCurve objects.
+# Adds Point_onCurve.svg icon to the model tree.
+#
+# ---------------------------------------------------------------------------
+# Changelog
+# ---------------------------------------------------------------------------
+#
+# v0.01  - Initial ViewProvider for Point_onCurve tree icon.
+#        - onDocumentRestored() ensures icon survives save/reload.
+#
+# ---------------------------------------------------------------------------
+
+import FreeCAD
+import FreeCADGui
+import os
+
+
+class Point_onCurve_ViewProvider:
+
+    def __init__(self, vobj):
+        vobj.Proxy = self
+    # END __init__()
+
+    def getIcon(self):
+        icon_path = os.path.join(
+            FreeCAD.getUserAppDataDir(),
+            "Mod", "Silky", "Resources", "Icons", "Point_onCurve.svg")
+        return icon_path
+    # END getIcon()
+
+    def attach(self, vobj):
+        self.vobj = vobj
+    # END attach()
+
+    def onDocumentRestored(self, vobj):
+        vobj.Proxy = self
+    # END onDocumentRestored()
+
+    def onChanged(self, vobj, prop):
+        pass
+    # END onChanged()
+
+    def updateData(self, fp, prop):
+        pass
+    # END updateData()
+
+    def doubleClicked(self, vobj):
+        return True
+    # END doubleClicked()
+
+    def setEdit(self, vobj, mode=0):
+        return False
+    # END setEdit()
+
+    def unsetEdit(self, vobj, mode=0):
+        return False
+    # END unsetEdit()
+
+    def __getstate__(self):
+        return None
+    # END __getstate__()
+
+    def __setstate__(self, state):
+        return None
+    # END __setstate__()
+
+# END class Point_onCurve_ViewProvider

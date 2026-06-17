@@ -45,7 +45,8 @@ class CubicSurface_44():
 		grid=Gui.Selection.getSelection()[0]
 		a=FreeCAD.ActiveDocument.addObject("Part::FeaturePython","CubicSurface_44_000")
 		AN.CubicSurface_44(a,grid)
-		a.ViewObject.Proxy=0 # just set it to something different from None (this assignment is needed to run an internal notification)
+		import CubicSurface_44_vp
+		CubicSurface_44_vp.CubicSurface_44_ViewProvider(a.ViewObject)
 		a.ViewObject.DisplayMode = u"Shaded"
 		a.ViewObject.ShapeColor = (0.33,0.67,1.00)
 		FreeCAD.ActiveDocument.recompute()
