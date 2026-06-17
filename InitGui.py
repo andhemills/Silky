@@ -57,6 +57,7 @@ class Silk (Workbench):
 		import StarTrim_CubicNStar
 		import SilkPose
 		import Reload_Silk
+		import MixCurve2ControlPoly4_cmd
 
 		# A list of command names created by the imports above
 		self.list = ["ControlPoly4",
@@ -86,7 +87,8 @@ class Silk (Workbench):
 					"CubicNStarSurface_NStar66",
 					"StarTrim_CubicNStar",
 					"SilkPose",
-					"Reload_Silk"] 
+					"Reload_Silk",
+					"MixCurve2ControlPoly4"] 
 					
 		
 		self.appendToolbar("Silk Commands",self.list) # creates a new toolbar with your commands
