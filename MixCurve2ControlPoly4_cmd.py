@@ -12,6 +12,10 @@
 # Changelog
 # ---------------------------------------------------------------------------
 #
+# v0.02  - Replaced ViewObject.Proxy=0 with MixCurve2ControlPoly4_ViewProvider
+#          so tree icon shows SilkyMixCurve2ControPoly4.svg.
+#        - Display properties (line/point color and size) set after VP call.
+#
 # v0.01  - Initial command registration.
 #        - Iterates all edges of selected MixedCurve.
 #        - Skips edges that fail can_process_edge() preflight.
@@ -93,7 +97,8 @@ class MixCurve2ControlPoly4_Command:
                                 f"MixCurve2ControlPoly4_e{i}")
             MixCurve2ControlPoly4(obj, mix_curve, i)
 
-            obj.ViewObject.Proxy = 0
+            import MixCurve2ControlPoly4_vp
+            MixCurve2ControlPoly4_vp.MixCurve2ControlPoly4_ViewProvider(obj.ViewObject)
             obj.ViewObject.LineWidth  = 1.00
             obj.ViewObject.LineColor  = (0.00, 1.00, 1.00)
             obj.ViewObject.PointSize  = 4.00

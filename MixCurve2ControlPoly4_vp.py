@@ -9,6 +9,9 @@
 # Changelog
 # ---------------------------------------------------------------------------
 #
+# v0.02  - Added onDocumentRestored() so tree icon survives save/reload.
+#        - Tree icon set to ControlPoly4.svg to match Silk ControlPoly4 style.
+#
 # v0.01  - Initial ViewProvider. Minimal implementation matching
 #          Silk ControlPoly4 style (line display, no face).
 #
@@ -28,13 +31,17 @@ class MixCurve2ControlPoly4_ViewProvider:
     def getIcon(self):
         icon_path = os.path.join(
             FreeCAD.getUserAppDataDir(),
-            "Mod", "Silky", "Resources", "Icons", "SilkyMixCurve2ControPoly4.svg")
+            "Mod", "Silky", "Resources", "Icons", "ControlPoly4.svg")
         return icon_path
     # END getIcon()
 
     def attach(self, vobj):
         self.vobj = vobj
     # END attach()
+
+    def onDocumentRestored(self, vobj):
+        vobj.Proxy = self
+    # END onDocumentRestored()
 
     def onChanged(self, vobj, prop):
         pass
