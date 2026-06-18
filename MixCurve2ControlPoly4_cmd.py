@@ -37,7 +37,7 @@ class MixCurve2ControlPoly4_Command:
         import os
         icon_path = os.path.join(
             FreeCAD.getUserAppDataDir(),
-            "Mod", "Silky", "Resources", "Icons", "SilkyMixCurve2ControPoly4.svg")
+            "Mod", "Silky", "Resources", "Icons", "SilkyMixCurve2ControlPoly4.svg")
         return {
             'Pixmap':  icon_path,
             'MenuText': "MixedCurve to ControlPoly4",
