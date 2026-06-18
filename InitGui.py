@@ -40,6 +40,7 @@ class Silk (Workbench):
 		import ControlGrid44_EdgeSegment
 		import ControlGrid44_2EdgeSegments
 		import Silky_ControlGrid44_EdgeSegments
+		import Silky_Sketch2SegCurves
 		import ControlPoly6
 		import CubicCurve_6
 		import ControlGrid66
@@ -72,6 +73,7 @@ class Silk (Workbench):
 					"ControlGrid44_EdgeSegment",
 					"ControlGrid44_2EdgeSegments",
 					"Silky_ControlGrid44_EdgeSegments",
+					"Silky_Sketch2SegCurves",
 					"ControlPoly6",
 					"CubicCurve_6",
 					"ControlGrid66",
