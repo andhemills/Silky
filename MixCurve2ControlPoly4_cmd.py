@@ -35,14 +35,14 @@ class MixCurve2ControlPoly4_Command:
 
     def GetResources(self):
         import os, Silk_dummy
-  #      icon_path = os.path.join(
-  #          FreeCAD.getUserAppDataDir(),
-   #         "Mod", "Silky", "Resources", "Icons", "SilkyMixCurve2ControlPoly4.svg")
-   # Locate Workbench Directory
+ #       icon_path = os.path.join(
+ #           FreeCAD.getUserAppDataDir(),
+ #           "Mod", "Silky", "Resources", "Icons", "SilkyMixCurve2ControlPoly4.svg")
+        # Locate Workbench Directory
         path_Silk = os.path.dirname(Silk_dummy.__file__)
         path_Silk_icons =  os.path.join( path_Silk, 'Resources', 'Icons')
-        iconPath = path_Silk_icons + '/SilkyMixCurve2ControlPoly4.svg'
-
+        icon_path = path_Silk_icons + '/SilkyMixCurve2ControlPoly4.png'
+        
         return {
             'Pixmap':  icon_path,
             'MenuText': "MixedCurve to ControlPoly4",

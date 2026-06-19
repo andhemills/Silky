@@ -53,7 +53,7 @@ import Silk_dummy
 
 path_Silk = os.path.dirname(Silk_dummy.__file__)
 path_Silk_icons = os.path.join(path_Silk, 'Resources', 'Icons')
-iconPath = os.path.join(path_Silk_icons, 'SilkyControlGrid44_2EdgeSegments.svg')
+iconPath = os.path.join(path_Silk_icons, 'SilkyControlGrid44_2EdgeSegments.png')
 
 
 # --- single-patch builder (lifted from stock Silk, unchanged behavior) ------

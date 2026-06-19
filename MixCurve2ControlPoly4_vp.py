@@ -31,7 +31,7 @@ class MixCurve2ControlPoly4_ViewProvider:
     def getIcon(self):
         icon_path = os.path.join(
             FreeCAD.getUserAppDataDir(),
-            "Mod", "Silky", "Resources", "Icons", "ControlPoly4.svg")
+            "Mod", "Silky", "Resources", "Icons", "ControlPoly4.png")
         return icon_path
     # END getIcon()
 
