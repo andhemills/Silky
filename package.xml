@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<package format="1" xmlns="https://wiki.freecad.org/Package_Metadata">
+  <name>Silky workbench</name>
+  <description>NURBS surface modeling tools for surfboard design. A namespaced fork of Silk (Edward Mills) — installs and runs alongside Silk without conflict.</description>
+  <version>0.4.0</version>
+  <date>2026-06-20</date>
+
+  <author email="@andhemills">andhemills</author>
+  <maintainer email="@andhemills">andhemills</maintainer>
+  <!-- Silky is a derivative work of Silk by Edward Mills (GPL-3.0-or-later). -->
+  <author>Edward Mills (original Silk author)</author>
+
+  <license file="LICENSE.txt">GPL-3.0-or-later</license>
+  <url type="repository" branch="main">https://github.com/andhemills/Silky</url>
+  <url type="documentation">https://github.com/andhemills/Silky</url>
+
+  <content>
+    <workbench>
+      <name>Silky workbench</name>
+      <classname>Silky</classname>
+      <description>NURBS surface modeling tools for surfboard design (fork of Silk).</description>
+      <subdirectory>./</subdirectory>
+      <icon>Resources/Icons/Silky.svg</icon>
+      <freecadmin>0.18.0</freecadmin>
+      <tag>curves</tag>
+      <tag>nurbs</tag>
+      <tag>surfboard</tag>
+    </workbench>
+  </content>
+
+</package>
