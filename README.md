@@ -1,66 +1,87 @@
-# Silk Workbench
-## High quality & low weight surface modeling tools for design and engineering
-
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/Silk_Front_Page_02.png?raw=true)
-
-### Thats the goal anyway ;) it's not perfect yet, but take a look below and decide if these results relate to your goals. 
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/Boaty_Mc_Boatface_16_22.png?raw=true)
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/Boaty_Mc_Boatface_16_24_medium.png?raw=true)
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/Boaty_Mc_Boatface_15_10.png?raw=true)
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/5%20sided%20shape_02_03.PNG?raw=true)
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/Aletta_01_08.png?raw=true)
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/Curva3D_silk_reboot_01_13.PNG?raw=true)
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/Curva3D_silk_reboot_01_11.PNG?raw=true)
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/CadDivision_16_01.png?raw=true)
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/CadDivision_19_03.png?raw=true)
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/CadDivision_Simple_01_11.PNG?raw=true)
-
-
+# Silky Workbench for FreeCAD
+## A derivative of [Silk Workbench](https://github.com/edwardvmills/Silk/tree/master), a high quality & low weight surface modeling tools for design and engineering
 
 ## Description
-NURBS Surface modeling tools focused on low degree and seam continuity ([FreeCAD](https://www.freecadweb.org/) Workbench). Silk is the new name of the [NURBSlib_EVM](http://edwardvmills.github.io/NURBSlib_EVM/) project.
-
-NURBS: smooth curves and surfaces whose form is controlled by a relatively small number of "control points", which sort of float close to the curves and surfaces. As their name indicates, the "control points" are what the user modifies in order to control the curves or surfaces. The "refinement" of a NURBS is controlled by its degree, and the "distance of effect" of a control point is controlled by the knot vector of the NURBS.
-
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/Silk_Demo_03_01.png?raw=true)
-
-Low Degree: Silk NURBS curves and surfaces are of the minimum degree suitable for the intended goal. The knot vectors are kept to a small consistent set. Often with NURBS modeling problems, the apparent solution is to increase the degree and number of knots. While this is perfectly valid, it raises the computational difficulty and organizational challenges of the control points. Silk aims to provide tools of the absolute minimum mathematical complexity for each problem solved.
-
-Seam Continuity: Silk's goal is to allow complex models to be built from individual NURBS sections, alternatively creating new surfaces to be continuous to existing surfaces, or providing tools to to create smooth transitions where surfaces are initially created with discontinuities.
-
-FreeCAD does the heavy lifting:
-
--providing a planar sketch interface that we can locate anywhere in 3D space to manipulate simple groups of very few control point (Silk can use multiple sketches in different planes to construct truly 3D curves and surface edges).
-
--drawing the beautiful and smooth surfaces once appropriate control grids have been prepared using Silk tools.
-
-Silk merely provides methods for combining these simple sketches into control point grids, which FreeCAD converts to NURBS surfaces. 
-
-The animation below demonstrates fine surface tuning through sketches with full engineering control of curve and surface continuity. Notice the low number of control points used on the profile control sketch. Up to a certain complexity, Silk updates virtually in real time with sketch editing.
-
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/Steering_Wheel_01_01.gif?raw=true)
-
+Silky is adding some features and automation not present in the Silk Workbench at the time of writing. Many of the changes and improvements are directly related to my goal of producing surfboard design(s) using FreeCAD.
+Limitations with Curves Workbench and specifically Gordon Surfaces led me to adopt Silk, in addition to plans to make injection molds, where high quality, smooth surfacing is required.
+If I was intending to produce surfboards with traditional, foam processes, a rougher surface would be acceptable with the expectation of secondary (sanding) operations.
+The primary target audience is Edward Mills, the creator of the Silk Workbench.
+It may be noted that Claude Sonnet and Opus 4.8 have been used to develop Silky.
 
 ## Limitations
-Although Silk is intended to provide efficient and user friendly tools in the long term, at this time, it behaves more like a low level library with GUI access to its functions. The individual functions create individual document objects, and in the future, relevant functions might be chained together automatically to create complex nested objects. The current objects are very likely to persist, both as individual document objects, and as sub-objects in the future.
-
-Modeling can be done in the current state, and the resulting data structures are efficient, but the process can be laborious. The best path forward for user friendliness will depend heavily upon the outcome of several debates within the FreeCAD community on how parts, solid bodies, assemblies, and object linking are organized.
-
-In the meantime Silk does offer a few tools not otherwise available in FreeCAD (eg. 3D splines), and can in general be seen as a sandbox for surface design, control strategies, data structures, and algorithms.
-
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/Steering_Wheel_03_05.png?raw=true)
-![example of current capability](https://github.com/edwardvmills/Silk/blob/master/Resources/Demo_files/Steering_Wheel_01_02.png?raw=true)
+Silky is specifically addressing and reducing the limitations found in Silk, but they are both limited and continued improvements and "automation" would benefit both.
 
 ## Installation
-Recommended installation is through the FreeCAD [Addon Manager](https://wiki.freecadweb.org/AddonManager) via `Tools -> Addon Manager`
+Download the code.
+Add a "Silky" folder to your FreeCAD\mod folder.
+Copy the files to Silky.
+
+Silk and Silky workbenches should be able to exist together, but be warned, they probably don't play well together!
 
 ## Documentation
-Until documentation and tutorials are rewritten for Silk, [NURBSlib_EVM](http://edwardvmills.github.io/NURBSlib_EVM/) is the best source of information regarding the project. 
-The tutorials can still be followed, simply skip setup, color, and display mode instructions. All setup is handled by installing the workbench, and the object display properties have been set to reasonable defaults. ([Silk Wiki in progress](https://github.com/edwardvmills/Silk/wiki))
+Edward Mills, the developer of Silk, has recently released a much needed, in-depth guide to using Silk in a [series of Youtube videos](https://www.youtube.com/watch?v=JyShdHkhUUs&list=PL5fnzN65kqK7XURv2nFv1udemJSgl40AW).
+Originally, the goal was to make Silky an extension of Silk, but Silky is derived and modifies Silk to avoid conflicts in case you wanted to test Silky and develop Silk on its own or compare features.
+Objects created in one workbench are not expected to function if you try to work them into the other's pipeline.
 
+More details are found in following sections:
 
+## Silky Changes to Silk Core
+- **Silk icons now appear for objects in Tree View**. It helps a lot with sorting and visually distinguishing objects instead of all objects using the part cube icon.
+
+![SilkyTreeView](https://github.com/andhemills/Silky/blob/main/Resources/Tutorial_Files/SilkyInfo/Silky_TreeIcons.png)
+
+## Silky Enhancements
+**Silky Sketch to Segmented Curves**. This is doing a lot of the heavy lifting and facilitates the first level of automation of repetitive tasks to reduce the work required by Silk.
+Select one or more valid sketches. Currently only works with sketches composed of multiple 4-point BSplines. Or numerous valid single-line sketches for instance, except sketches made of multiple straight lines.
+I work with BSplines as scaffolding for surfboard design, so there's a preference for 4-point BSplines.
+Result: Appropriate ControlPoly4, CubicCurve_4, Point_onCurve, ControlPoly4_segment and CubicCurve_4_segments are produced. Points default to u=[0, 0.1, 0.9, 1].
+Objects are named according to their
+You have an option to sort the objects into newly created folders.
+You may also include an appropriate number of folders in the selection after your objects, and the objects will be put in order of their creation.
+Or, you can choose no folder if you plan to sort them yourself.
+
+You may also select any number of ControlPoly4 and you'll get CubicCurve_4, Point_onCurve, ControlPoly4_segment and CubicCurve_4_segments
+Select any number of CubiCurve_4 to get Point_onCurve, ControlPoly4_segment and CubicCurve_4_segments
+Any number of Point_onCurves to produce ControlPoly4_segment and CubicCurve_4_segments
+Any number of ControlPoly4_segment will give you CubicCurve_4_segments
+
+![Silky_Sketch2_Segmented_Curves](https://github.com/andhemills/Silky/blob/main/Resources/Icons/SilkySketch2Segments.png)
+
+TODO: 
+- Add support for sketches composed of 2, 4 or more lines.
+- Arcs not tested.
+
+**Silky Edge Segments** - allow for more edge segment variations like 1x2 or 2x3, since I use some 2x1 or 1x3 for certain edge blends or hard edges in one direction with blends in another direction.
+
+![Silky Edge Segments](https://github.com/andhemills/Silky/blob/main/Resources/Icons/SilkyControlGrid44_2EdgeSegments.png)
+
+**Silky MixCurve to ControlPoly4**. MixCurves from Curves Workbench are also instrumental to the scaffolding I use to design surfboards in FreeCAD.
+Use this tool to produce ControlPoly4 objects from MixCurves.
+MixCurves must be made of 4 point BSplines. Their ends should be vertically/horizontally constrained.
+The first sketch selected to make the MixCurve will be the primary sketch, which will guarantee a near-perfect trace of the source BSpline and the second sketch may produce some minor deviation.
+The sketches may be composed of multiple BSplines. They don't necessarily have to connect or be tangent.
+However, unexpected results may occur if they aren't properly aligned (with vertical/horizontal constraint).
+
+![Sikly_MixCurve2_ControlPoly4](https://github.com/andhemills/Silky/blob/main/Resources/Icons/SilkyMixCurve2ControlPoly4.png)
+
+Note: A MixCurve2_ControlPoly6 was initially developed, which was more of an intellectual curiosity and it's been abandoned since it doesn't really fit into the Silk pipeline, although it produced a CubicCurve6, which more reliably traced a MixCurve in 3D space. The trade off of having a primary sketch and the minor deviations have been found acceptable in practice.
+If you use this and find CubicCurves are deviating more than you expect, try segmenting the mixcurve further, particularly toward endpoints or around/through tighter curves to produce a less deviant result
+
+**Silky Mirroring**. This is a chef's kiss. It operates similarly to Part mirroring, but produces functional Silk Objects.
+Select any number of silk objects, then click on the Silky Mirror button. Choose the mirror plane.
+Not all objects have been tested.
+
+![Silky_Mirror](https://github.com/andhemills/Silky/blob/main/Resources/Icons/SilkyMirror.png)
+
+TODO: (Mirroring)
+- allow more mirror options like Part (I only use YZ plane mirroring personally)
+
+## TODO - Big picture:
+There are still places for improvement, like generating grids, then surfaces. Most of the grid buttons could be minimized, creating grids and surfaces at once, however there are times you may want grids, but not the surface. It's often easier to delete than create. We also have the problem of the counter-clockwise selection as viewed from the outside, which can be problematic, for instance if you are producing a bowl or a concave object, it may be difficult to tell whhat is inside or outside. One possible solution is to define the main origin as the center point and users could be expected to work their design such that the origin would sit inside their object, or possibly use a sketch named origin, composed of a single vertex, which could be moved to indicate centering. This is a complex concept and further testing could be needed to determine the necessity of this process.
+I've only found ControlGirdNStar66 to be particular about the selection order.
 
 ## Licence
+Silky assumes credit to Edward Mills and presumes the same license as Silk.
 All program files (.py, .pyc, .FCMacro) are offered under the terms of the [Gnu gpl-v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 ![gplv3](https://www.gnu.org/graphics/gplv3-127x51.png)
